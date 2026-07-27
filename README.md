@@ -8,7 +8,7 @@
 ![LiteLLM](https://img.shields.io/badge/LiteLLM-latest-purple)
 ![Docker](https://img.shields.io/badge/docker-ready-blue)
 
-**[Live Demo](https://model-router-wccu.onrender.com/ui)** · **[API Docs](https://model-router-wccu.onrender.com/docs)** ·
+**[Live UI](https://model-router-wccu.onrender.com/ui)** · **[API Docs](https://model-router-wccu.onrender.com/docs)** ·
 
 ---
 
