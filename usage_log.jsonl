@@ -1,0 +1,5 @@
+{"timestamp": "2026-07-27T20:57:42.209662", "category": "coding", "model": "groq/llama-3.3-70b-versatile", "input_tokens": 45, "output_tokens": 591, "cost_usd": 0.00049344, "query_preview": "How do I reverse a linked list in Python?"}
+{"timestamp": "2026-07-27T20:57:42.848193", "category": "creative", "model": "groq/llama-3.1-8b-instant", "input_tokens": 42, "output_tokens": 286, "cost_usd": 2.498e-05, "query_preview": "Write a poem about the monsoon"}
+{"timestamp": "2026-07-27T20:57:43.094917", "category": "factual", "model": "groq/llama-3.1-8b-instant", "input_tokens": 42, "output_tokens": 38, "cost_usd": 5.14e-06, "query_preview": "Who was India first Prime Minister?"}
+{"timestamp": "2026-07-27T20:57:44.906709", "category": "long-doc", "model": "groq/llama-3.3-70b-versatile", "input_tokens": 47, "output_tokens": 441, "cost_usd": 0.00037612, "query_preview": "Summarize this 40 page research paper on climate change"}
+{"timestamp": "2026-07-27T21:01:35.321060", "category": "factual", "model": "groq/llama-3.1-8b-instant", "input_tokens": 40, "output_tokens": 454, "cost_usd": 3.832e-05, "query_preview": "what is model router?"}

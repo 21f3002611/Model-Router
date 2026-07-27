@@ -1,0 +1,189 @@
+<!-- frontend/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Model Router</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container { max-width: 800px; margin: 0 auto; }
+
+    h1 { font-size: 1.8rem; margin-bottom: 6px; color: #fff; }
+    .subtitle { color: #666; margin-bottom: 32px; font-size: 0.9rem; }
+
+    textarea {
+      width: 100%;
+      padding: 14px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      color: #e0e0e0;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 100px;
+      outline: none;
+    }
+    textarea:focus { border-color: #444; }
+
+    button {
+      margin-top: 12px;
+      padding: 12px 28px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover { background: #1d4ed8; }
+    button:disabled { background: #333; cursor: not-allowed; }
+
+    .result {
+      margin-top: 28px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 20px;
+      display: none;
+    }
+
+    .meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-category { background: #1e3a5f; color: #60a5fa; }
+    .badge-model    { background: #1a2e1a; color: #4ade80; }
+    .badge-cost     { background: #2d1f00; color: #fbbf24; }
+
+    .reason { font-size: 0.85rem; color: #666; margin-bottom: 16px; }
+
+    .response-text {
+      white-space: pre-wrap;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #ccc;
+      border-top: 1px solid #2a2a2a;
+      padding-top: 16px;
+    }
+
+    .stats-bar {
+      margin-top: 28px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 16px 20px;
+    }
+    .stats-bar h3 { font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; }
+    .stats-grid { display: flex; gap: 24px; flex-wrap: wrap; }
+    .stat { font-size: 0.9rem; }
+    .stat span { color: #fff; font-weight: 600; }
+
+    .loading { color: #666; font-style: italic; }
+    .error { color: #f87171; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚡ Model Router</h1>
+    <p class="subtitle">Routes your query to the best LLM automatically</p>
+
+    <textarea id="query" placeholder="Ask anything — code question, creative task, factual query..."></textarea>
+    <button id="submit" onclick="route()">Route Query</button>
+
+    <div class="result" id="result">
+      <div class="meta">
+        <span class="badge badge-category" id="category"></span>
+        <span class="badge badge-model" id="model"></span>
+        <span class="badge badge-cost" id="cost"></span>
+      </div>
+      <div class="reason" id="reason"></div>
+      <div class="response-text" id="response"></div>
+    </div>
+
+    <div class="stats-bar">
+      <h3>Session Stats</h3>
+      <div class="stats-grid">
+        <div class="stat">Requests: <span id="stat-requests">—</span></div>
+        <div class="stat">Total Cost: <span id="stat-cost">—</span></div>
+        <div class="stat">Models: <span id="stat-models">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = "http://localhost:8000";
+
+    async function route() {
+      const query = document.getElementById("query").value.trim();
+      if (!query) return;
+
+      const btn = document.getElementById("submit");
+      const result = document.getElementById("result");
+
+      btn.disabled = true;
+      btn.textContent = "Routing...";
+      result.style.display = "block";
+      document.getElementById("response").innerHTML = '<span class="loading">Thinking...</span>';
+
+      try {
+        const res = await fetch(`${API}/route`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query })
+        });
+        const data = await res.json();
+
+        document.getElementById("category").textContent = data.category;
+        document.getElementById("model").textContent = data.model_used.split("/")[1];
+        document.getElementById("cost").textContent = data.estimated_cost;
+        document.getElementById("reason").textContent = data.reason;
+        document.getElementById("response").textContent = data.response;
+
+        loadStats();
+      } catch (e) {
+        document.getElementById("response").innerHTML = `<span class="error">Error: ${e.message}</span>`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Route Query";
+      }
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API}/stats`);
+        const data = await res.json();
+        document.getElementById("stat-requests").textContent = data.total_requests;
+        document.getElementById("stat-cost").textContent = `$${data.total_cost_usd.toFixed(6)}`;
+        document.getElementById("stat-models").textContent = Object.keys(data.by_model).length;
+      } catch (e) {}
+    }
+
+    // Ctrl+Enter to submit
+    document.getElementById("query").addEventListener("keydown", e => {
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) route();
+    });
+
+    loadStats();
+  </script>
+</body>
+</html>
