@@ -8,7 +8,7 @@
 ![LiteLLM](https://img.shields.io/badge/LiteLLM-latest-purple)
 ![Docker](https://img.shields.io/badge/docker-ready-blue)
 
-**[Live Demo](https://your-app.onrender.com/ui)** · **[API Docs](https://your-app.onrender.com/docs)** · **[Demo Video](#)** ← replace with your Loom link
+**[Live Demo](https://model-router-wccu.onrender.com/ui)** · **[API Docs](https://model-router-wccu.onrender.com/docs)** ·
 
 ---
 
@@ -51,20 +51,12 @@ Response + Cost Log → /stats dashboard
 
 ---
 
-## Demo
-
-_60-second walkthrough: three different queries routed to different models with cost shown live_
-
-**[Watch Loom →](#)** ← paste your Loom URL here
-
----
-
 ## Run locally
 
 **Prerequisites:** Python 3.12+, a [Groq API key](https://console.groq.com) (free)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/model-router
+git clone https://github.com/21f3002611/model-router
 cd model-router
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
@@ -162,16 +154,4 @@ docker run -p 8000:8000 -e GROQ_API_KEY=your_key model-router
 
 ---
 
-## Project 1 of 7 — AI Engineer Portfolio
 
-This is the first project in a 10-week sprint to build a production-grade AI engineering portfolio. Each project targets a core skill that AI engineering teams actually interview for.
-
-| # | Project | Core Skill |
-|---|---------|-----------|
-| **1** | **Model Router** | Classification + LLM APIs |
-| 2 | Terminal Agent | Tool calling + Agent loops |
-| 3 | Generative Courses | Structured output + RAG |
-| 4 | Slack + AI Bot | Integrations + Event-driven |
-| 5 | Text-to-SQL | SQL gen + Code understanding |
-| 6 | Benchmark Tool | Eval design + Testing |
-| 7 | OSS Contribution | Architecture + Collaboration |
